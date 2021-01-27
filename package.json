@@ -1,6 +1,6 @@
 {
   "name": "react-code-editor-editable",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "&quot;Code editor&quot;",
   "author": "DanielPereod",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "(copyfiles --flat ./src/scss/styles/*.css ./dist/scss/styles) & microbundle-crl --no-compress --format modern,cjs",
+    "build": "(copyfiles --flat ./src/scss/styles/*.css ./dist/scss/styles) & microbundle-crl --css-modules false --no-compress --format modern,cjs",
     "start": "(copyfiles --flat ./src/scss/styles/*.css ./dist/scss/styles) & microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
