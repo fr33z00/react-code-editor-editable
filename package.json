@@ -1,7 +1,7 @@
 {
   "name": "react-code-editor-editable",
-  "version": "0.5.1",
-  "description": "&quot;Code editor&quot;",
+  "version": "0.5.6",
+  "description": "Code editor",
   "author": "DanielPereod",
   "license": "MIT",
   "repository": "DanielPereod/react-code-editor-editable",
@@ -12,8 +12,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "(copyfiles --flat ./src/scss/styles/*.css ./dist/scss/styles) & microbundle-crl --css-modules false --no-compress --format modern,cjs",
-    "start": "(copyfiles --flat ./src/scss/styles/*.css ./dist/scss/styles) & microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
+    "build": "microbundle-crl --css-modules false --no-compress --format modern,cjs",
+    "start": "microbundle-crl watch --no-compress --css-modules false --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -66,5 +66,16 @@
   ],
   "dependencies": {
     "highlight.js": "^10.5.0"
-  }
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "code-editor",
+    "code",
+    "editor",
+    "highlight",
+    "js",
+    "html",
+    "css"
+  ]
 }

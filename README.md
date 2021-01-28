@@ -1,19 +1,30 @@
 # React code editor
 
 ![mockup](https://github.com/DanielPereod/react-code-editor-editable/blob/master/assets/mockup.gif)
+
 ## Functionalities
+
 - 191 languages highlighting with [Highlight.js](https://highlightjs.org/).
 - 97 themes/styles.
 - Scrollable.
 - Tab support.
 - Optional line numbers on editor.
 
+
+## Installation
+
+`npm i react-code-editor-editable`
+</br>
+or
+</br>
+`yarn add react-code-editor-editable`
+
+
 ## Usage
 ```JSX
 import React, { useState } from 'react'
 
 import { CodeEditorEditable } from 'react-code-editor-editable'
-import 'react-code-editor-editable/dist/index.css'
 
 const App = () => {
   const [value, setValue] = useState('<div></div>')
@@ -37,19 +48,21 @@ export default App
 ```
 
 ## Props
-| Name          |  Type                               | Description                                                                             |Required|
-|---------------|-------------------------------------|-----------------------------------------------------------------------------------------|---|
-| value         | *string*                            | String that contains the code written.                                                  |✔️|
-| setValue      | *Dispatch<SetStateAction<string>>*  | Function to that sets the the value field.                                              |✔️|
-| width         | *string*                            | Code editor width.                                                                      |❌|
-| height        | *string*                            | Code editor height.                                                                     |❌|
-| padding       | *string*                            | Code editor padding.                                                                    |❌|
-| borderRadius  | *string*                            | Code editor border radius.                                                              |❌|
-| language      | *string*                            | See here [highlight.js](https://highlightjs.org/static/demo/) all languages supported . |✔️|
-| inlineNumbers | *boolean*                           | Shows line numbers.                                                                     |❌|
-| caretColor    | *string*                            | Changes the caret color.                                                                |❌|
-| tabSize       | *number*                            | Number of spaces added when Tab is pressed.                                             |❌|
-| editorStyle   | *string*                            | All styles can be found [here](#styles).                                                |✔️|
+
+| Name          | Type                               | Description                                                                             | Required |
+| ------------- | ---------------------------------- | --------------------------------------------------------------------------------------- | -------- |
+| value         | _string_                           | String that contains the code written.                                                  | ✔️       |
+| setValue      | _Dispatch<SetStateAction<string>>_ | Function to that sets the the value field.                                              | ✔️       |
+| width         | _string_                           | Code editor width.                                                                      | ❌       |
+| height        | _string_                           | Code editor height.                                                                     | ❌       |
+| padding       | _string_                           | Code editor padding.                                                                    | ❌       |
+| borderRadius  | _string_                           | Code editor border radius.                                                              | ❌       |
+| language      | _string_                           | See here [highlight.js](https://highlightjs.org/static/demo/) all languages supported . | ✔️       |
+| inlineNumbers | _boolean_                          | Shows line numbers.                                                                     | ❌       |
+| caretColor    | _string_                           | Changes the caret color.                                                                | ❌       |
+| tabSize       | _number_                           | Number of spaces added when Tab is pressed.                                             | ❌       |
+| editorStyle   | _string_                           | All styles can be found [here](#styles).                                                | ✔️       |
+
 
 ## Styles
 <details>
