@@ -52,7 +52,7 @@ export default App
 | Name          | Type                               | Description                                                                             | Required |
 | ------------- | ---------------------------------- | --------------------------------------------------------------------------------------- | -------- |
 | value         | _string_                           | String that contains the code written.                                                  | ✔️       |
-| setValue      | _Dispatch<SetStateAction<string>>_ | Function to that sets the the value field.                                              | ✔️       |
+| setValue      | _any_ | Function to that sets the the value field.                                              | ✔️       |
 | width         | _string_                           | Code editor width.                                                                      | ❌       |
 | height        | _string_                           | Code editor height.                                                                     | ❌       |
 | padding       | _string_                           | Code editor padding.                                                                    | ❌       |
