@@ -7,8 +7,8 @@ import React, {
   useState
 } from 'react'
 import { highlightBlock } from 'highlight.js'
-import './scss/CodeEditor.scss'
 import { CodeEditorProps } from './types/CodeEditor'
+require('./index.css')
 
 export const CodeEditorEditable = ({
   width = '500px',
@@ -26,30 +26,38 @@ export const CodeEditorEditable = ({
   const [lineNumbers, setLineNumbers] = useState([''])
   const [caretPos, setCaretPos] = useState(0)
 
-  const codeBlockRef = useRef<any>(null)
-  const textAreaRef = useRef<any>(null)
-  const lineNumbersRef = useRef<any>(null)
+  const codeBlockRef = useRef<HTMLDivElement>(null)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const lineNumbersRef = useRef<HTMLDivElement>(null)
 
   const countLines = (codeString: string): string[] => {
     return codeString?.split(/\r*\n/)
   }
 
-  const handleScroll = (e: any) => {
-    codeBlockRef.current!.scroll(e.target.scrollLeft, e.target.scrollTop)
-    if (inlineNumbers) {
-      lineNumbersRef.current!.scroll(e.target.scrollLeft, e.target.scrollTop)
+  const handleScroll = (e: React.UIEvent<HTMLElement>): void => {
+    const eventTarget = e.target as Element
+    if (codeBlockRef.current) {
+      codeBlockRef.current.scroll(eventTarget.scrollLeft, eventTarget.scrollTop)
+      if (inlineNumbers && lineNumbersRef.current) {
+        lineNumbersRef.current.scroll(
+          eventTarget.scrollLeft,
+          eventTarget.scrollTop
+        )
+      }
     }
   }
-  const handleChange = (e: ChangeEvent) => {
+  const handleChange = (e: ChangeEvent): void => {
     setValue((e.target as HTMLInputElement).value)
   }
 
-  const setCaretPosition = (ctrl: any, pos: any) => {
+  const setCaretPosition = (ctrl: HTMLTextAreaElement, pos: number): void => {
     if (ctrl.setSelectionRange) {
       ctrl.focus()
       ctrl.setSelectionRange(pos, pos)
-    } else if (ctrl.createTextRange) {
-      const range = ctrl.createTextRange()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } else if ((ctrl as any).createTextRange) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const range = (ctrl as any).createTextRange()
       range.collapse(true)
       range.moveEnd('character', pos)
       range.moveStart('character', pos)
@@ -57,7 +65,7 @@ export const CodeEditorEditable = ({
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     const myField = textAreaRef.current
     const myValue = Math.random()
       .toString(32)
@@ -66,7 +74,7 @@ export const CodeEditorEditable = ({
 
     if (e.key === 'Tab') {
       e.preventDefault()
-      if (myField.selectionStart || myField.selectionStart === '0') {
+      if (myField?.selectionStart || myField?.selectionStart === 0) {
         const startPos = myField.selectionStart
         const endPos = myField.selectionEnd
         setCaretPos(startPos + myValue.length)
@@ -82,19 +90,21 @@ export const CodeEditorEditable = ({
   }
 
   useEffect(() => {
-    require(`./scss/styles/${editorStyle}.css`)
+    require(`../node_modules/highlight.js/styles/${editorStyle}.css`)
   }, [editorStyle])
 
   useLayoutEffect(() => {
-    if (caretPos !== 0) {
+    if (caretPos !== 0 && textAreaRef.current) {
       setCaretPosition(textAreaRef.current, caretPos)
       setCaretPos(0)
     }
   }, [caretPos])
 
   useEffect(() => {
-    highlightBlock(codeBlockRef.current)
-    setLineNumbers(countLines(value))
+    if (codeBlockRef.current) {
+      highlightBlock(codeBlockRef.current)
+      setLineNumbers(countLines(value))
+    }
   }, [value])
 
   return (
