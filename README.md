@@ -25,6 +25,7 @@ or
 import React, { useState } from 'react'
 
 import { CodeEditorEditable } from 'react-code-editor-editable'
+import 'highlight.js/styles/dracula.css';
 
 const App = () => {
   const [value, setValue] = useState('<div></div>')
@@ -34,7 +35,6 @@ const App = () => {
       <CodeEditorEditable
         value={value}
         setValue={setValue}
-        editorStyle='nord'
         width='50vw'
         height='50vh'
         language='html'
@@ -61,7 +61,6 @@ export default App
 | inlineNumbers | _boolean_                          | Shows line numbers.                                                                     | ❌       |
 | caretColor    | _string_                           | Changes the caret color.                                                                | ❌       |
 | tabSize       | _number_                           | Number of spaces added when Tab is pressed.                                             | ❌       |
-| editorStyle   | _string_                           | All styles can be found [here](#styles).                                                | ✔️       |
 
 ## Styles
 
