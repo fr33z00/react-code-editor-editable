@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { CodeEditorEditable } from 'react-code-editor-editable';
+import 'highlight.js/styles/dracula.css';
 
 const App = () => {
   const [value, setValue] = useState('<div></div>');
@@ -10,7 +11,6 @@ const App = () => {
       <CodeEditorEditable
         value={value}
         setValue={setValue}
-        editorStyle='nord'
         width='50vw'
         height='50vh'
         language='html'
