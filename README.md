@@ -13,7 +13,10 @@
 ## Installation
 
 `npm i react-code-editor-editable`
+</br>
 or
+</br>
+
 `yarn add react-code-editor-editable`
 
 ## Usage
