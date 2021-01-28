@@ -10,17 +10,17 @@
 - Tab support.
 - Optional line numbers on editor.
 
+
 ## Installation
 
 `npm i react-code-editor-editable`
 </br>
 or
 </br>
-
 `yarn add react-code-editor-editable`
 
-## Usage
 
+## Usage
 ```JSX
 import React, { useState } from 'react'
 
@@ -62,8 +62,8 @@ export default App
 | caretColor    | _string_                           | Changes the caret color.                                                                | ❌       |
 | tabSize       | _number_                           | Number of spaces added when Tab is pressed.                                             | ❌       |
 
-## Styles
 
+## Styles
 <details>
 <summary>Style names</summary>
 </br>
