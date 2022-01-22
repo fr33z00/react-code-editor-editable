@@ -89,7 +89,7 @@ export const CodeEditorEditable = ({
       if (myField?.selectionStart || myField?.selectionStart === 0) {
         const startPos = myField.value.substring(0, myField.selectionStart).lastIndexOf('\n') + 1
         const endPos = myField.selectionEnd -
-          (myField.selectionStart != myField.selectionEnd && myField.value[myField.selectionEnd-1] == '\n');
+          (myField.selectionStart != myField.selectionEnd && myField.value[myField.selectionEnd-1] == '\n' ? 1: 0);
         const before = myField.value.substring(0, startPos);
         const selection = myField.value.substring(startPos, endPos);
         const after = myField.value.substring(endPos);
