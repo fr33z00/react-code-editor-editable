@@ -82,7 +82,6 @@ export const CodeEditorEditable = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-  var handleKeyDown = function handleKeyDown(e) {
     const myField = textAreaRef.current;
     const myValue = '                                '.substring(0, tabSize);
     if (e.key === 'Tab') {
