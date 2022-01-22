@@ -35,7 +35,7 @@ export const CodeEditorEditable = ({
   inlineNumbers = true
 }: CodeEditorProps): ReactElement => {
   const [lineNumbers, setLineNumbers] = useState(['']);
-  const [caretPos, setCaretPos] = useState(0);
+  const [caretPos, setCaretPos] = useState({start: -1, end: -1});
 
   const codeBlockRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -64,49 +64,69 @@ export const CodeEditorEditable = ({
     setValue((e.target as HTMLInputElement).value);
   };
 
-  const setCaretPosition = (ctrl: HTMLTextAreaElement, pos: number): void => {
+  const setCaretPosition = (ctrl: HTMLTextAreaElement, start: number, end: number): void => {
     if (ctrl.setSelectionRange) {
       ctrl.focus();
-      ctrl.setSelectionRange(pos, pos);
+      ctrl.setSelectionRange(start, end);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } else if ((ctrl as any).createTextRange) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const range = (ctrl as any).createTextRange();
       range.collapse(true);
-      range.moveEnd('character', pos);
-      range.moveStart('character', pos);
+      range.moveEnd('character', end);
+      range.moveStart('character', start);
       range.select();
     }
+    ctrl.selectionStart = start;
+    ctrl.selectionEnd = end;
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
+  var handleKeyDown = function handleKeyDown(e) {
     const myField = textAreaRef.current;
-    const myValue = Math.random()
-      .toString(32)
-      .substring(0, tabSize)
-      .replace(/./g, ' ');
-
+    const myValue = '                                '.substring(0, tabSize);
     if (e.key === 'Tab') {
       e.preventDefault();
       if (myField?.selectionStart || myField?.selectionStart === 0) {
-        const startPos = myField.selectionStart;
-        const endPos = myField.selectionEnd;
-        setCaretPos(startPos + myValue.length);
-
-        const newValue =
-          myField.value.substring(0, startPos) +
-          myValue +
-          myField.value.substring(endPos, myField.value.length);
-
+        const startPos = myField.value.substring(0, myField.selectionStart).lastIndexOf('\n') + 1
+        const endPos = myField.selectionEnd -
+          (myField.selectionStart != myField.selectionEnd && myField.value[myField.selectionEnd-1] == '\n');
+        const before = myField.value.substring(0, startPos);
+        const selection = myField.value.substring(startPos, endPos);
+        const after = myField.value.substring(endPos);
+        let newValue;
+        if (endPos != startPos) {
+          if (e.shiftKey) {
+            const r = RegExp('\n' + myValue, 'mg');
+            newValue = before +
+              selection.substring(selection.substring(0, myValue.length) == myValue ? myValue.length : 0)
+                .replace(r, '\n') +
+              after;
+          }
+          else {
+            newValue = before + myValue + selection.replace(/\n/mg, '\n' + myValue) + after;
+          }
+          setCaretPos({start: startPos, end: newValue.length - after.length});
+        }
+        else if (e.shiftKey) {
+          if (myField.value.substring(endPos, endPos + myValue.length) == myValue) {
+            newValue = myField.value.substring(0, startPos) + myField.value.substring(endPos + myValue.length);
+            setCaretPos({start: startPos, end: startPos});
+          }
+        }
+        else {
+          setCaretPos({start: startPos + myValue.length, end: startPos + myValue.length});
+          newValue = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos);
+        }
         setValue(newValue);
       }
     }
   };
 
   useLayoutEffect(() => {
-    if (caretPos !== 0 && textAreaRef.current) {
-      setCaretPosition(textAreaRef.current, caretPos);
-      setCaretPos(0);
+    if (caretPos.start !== -1 && textAreaRef.current) {
+      setCaretPosition(textAreaRef.current, caretPos.start, caretPos.end);
+      setCaretPos({start: -1, end: -1});
     }
   }, [caretPos]);
 
