@@ -145,7 +145,6 @@ export const CodeEditorEditable = ({
           className='hljs code-editor__textarea__qxcy'
           onScroll={handleScroll}
           onChange={handleChange}
-          maxLength={3000}
           onKeyDown={handleKeyDown}
           style={{
             msScrollbarBaseColor: 'violet',
