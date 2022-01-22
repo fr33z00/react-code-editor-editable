@@ -2,12 +2,18 @@
 
 ![mockup](https://github.com/DanielPereod/react-code-editor-editable/blob/master/assets/mockup.gif)
 
+## Changes from root version
+
+- Removed 3000 characters arbitrary limitation
+- Tabs managed like in a code editor
+- Untested on non modern browsers
+ 
 ## Functionalities
 
 - 191 languages highlighting with [Highlight.js](https://highlightjs.org/).
 - 97 themes/styles.
 - Scrollable.
-- Tab support.
+- Advanced tab support
 - Optional line numbers on editor.
 
 
