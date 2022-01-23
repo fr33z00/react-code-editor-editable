@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState
 } from 'react';
-require('./index.css');
+require('./scss/CodeEditor.scss');
 
 interface CodeEditorProps {
   value: string;
