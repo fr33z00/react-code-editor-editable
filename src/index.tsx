@@ -20,6 +20,7 @@ interface CodeEditorProps {
   inlineNumbers?: boolean;
   caretColor?: string;
   tabSize?: 1 | 2 | 3 | 4 | 5 | 6;
+  placeholder?: string;
 }
 
 export const CodeEditorEditable = ({
@@ -32,7 +33,8 @@ export const CodeEditorEditable = ({
   language,
   caretColor = 'red',
   tabSize = 2,
-  inlineNumbers = true
+  inlineNumbers = true,
+  placeholder = '\n\n'
 }: CodeEditorProps): ReactElement => {
   const [lineNumbers, setLineNumbers] = useState(['']);
   const [caretPos, setCaretPos] = useState({start: -1, end: -1});
@@ -154,9 +156,8 @@ export const CodeEditorEditable = ({
         <code
           ref={codeBlockRef}
           className={`code-editor__hlcode__qxcy language-${language}`}
-        >
-          {`${value}\n\r`}
-        </code>
+          placeholder={placeholder}
+        >{`${value}`}</code>
         <textarea
           value={value}
           spellCheck='false'
