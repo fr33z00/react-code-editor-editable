@@ -90,7 +90,7 @@ $dark-caret: #ffffff;
       overflow: scroll;
       box-sizing: border-box;
     }
-    code-editor__hlcode__qxcy:empty::after{
+    .code-editor__hlcode__qxcy:empty::after{
       Content: attr(placeholder);
     }
     .code-editor__textarea__qxcy {
