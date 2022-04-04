@@ -67,6 +67,7 @@ export default App
 | inlineNumbers | _boolean_                          | Shows line numbers.                                                                     | ❌       |
 | caretColor    | _string_                           | Changes the caret color.                                                                | ❌       |
 | tabSize       | _number_                           | Number of spaces added when Tab is pressed.                                             | ❌       |
+| placeholder   | _string_                           | placeholder.                                                                            | ❌       |
 
 
 ## Styles
