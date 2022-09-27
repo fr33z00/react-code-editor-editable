@@ -63,7 +63,7 @@ export const CodeEditorEditable = ({
     }
   };
   const handleChange = (e: ChangeEvent): void => {
-    setValue((e.target as HTMLInputElement).value.replace(/\u200b$/, '');
+    setValue((e.target as HTMLInputElement).value.replace(/\u200b$/, ''));
   };
 
   const setCaretPosition = (ctrl: HTMLTextAreaElement, start: number, end: number): void => {
