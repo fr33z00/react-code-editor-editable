@@ -63,7 +63,7 @@ export const CodeEditorEditable = ({
     }
   };
   const handleChange = (e: ChangeEvent): void => {
-    setValue((e.target as HTMLInputElement).value);
+    setValue((e.target as HTMLInputElement).value.replace(/\u200b$/, '');
   };
 
   const setCaretPosition = (ctrl: HTMLTextAreaElement, start: number, end: number): void => {
@@ -84,40 +84,53 @@ export const CodeEditorEditable = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
-    const myField = textAreaRef.current;
+    const myField = e.currentTarget;
+    const val = myField.value.replace(/\n\u200b$/, '');
     const myValue = '                                '.substring(0, tabSize);
-    if (e.key === 'Tab') {
+    if (e.key == 'Backspace' && myField.value.match(/\n\u200b$/)) {
       e.preventDefault();
-      if (myField?.selectionStart || myField?.selectionStart === 0) {
-        const startPos = myField.value.substring(0, myField.selectionStart).lastIndexOf('\n') + 1
+      setValue(val.replace(/\n$/, ''))
+    }
+    else if (e.key === 'Tab') {
+      e.preventDefault();
+      if (myField.selectionStart || myField.selectionStart === 0) {
+        const startPos = val.substring(0, myField.selectionStart).lastIndexOf('\n') + 1
         const endPos = myField.selectionEnd -
-          (myField.selectionStart != myField.selectionEnd && myField.value[myField.selectionEnd-1] == '\n' ? 1: 0);
-        const before = myField.value.substring(0, startPos);
-        const selection = myField.value.substring(startPos, endPos);
-        const after = myField.value.substring(endPos);
+          (myField.selectionStart != myField.selectionEnd && val[myField.selectionEnd-1] == '\n' ? 1: 0);
+        const before = val.substring(0, startPos);
+        const selection = val.substring(startPos, endPos);
+        const after = val.substring(endPos);
         let newValue;
         if (endPos != startPos) {
           if (e.shiftKey) {
             const r = RegExp('\n' + myValue, 'mg');
             newValue = before +
-              selection.substring(selection.substring(0, myValue.length) == myValue ? myValue.length : 0)
-                .replace(r, '\n') +
+              selection.substring(selection.substring(0, tabSize) == myValue ? tabSize : 0).replace(r, '\n') +
               after;
           }
           else {
             newValue = before + myValue + selection.replace(/\n/mg, '\n' + myValue) + after;
+            if (selection.replace(/ +/, '').length)
+              setCaretPos({
+                start: startPos,
+                end: newValue.length - after.length
+              });
+            else
+              setCaretPos({
+                start: endPos + tabSize,
+                end: endPos + tabSize
+              });
           }
-          setCaretPos({start: startPos, end: newValue.length - after.length});
         }
         else if (e.shiftKey) {
-          if (myField.value.substring(endPos, endPos + myValue.length) == myValue) {
-            newValue = myField.value.substring(0, startPos) + myField.value.substring(endPos + myValue.length);
+          if (val.substring(endPos, endPos + tabSize) == myValue) {
+            newValue = before + after.substring(tabSize);
             setCaretPos({start: startPos, end: startPos});
           }
         }
         else {
-          setCaretPos({start: startPos + myValue.length, end: startPos + myValue.length});
-          newValue = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos);
+          setCaretPos({start: startPos + tabSize, end: startPos + tabSize});
+          newValue = before + myValue + after;
         }
         setValue(newValue);
       }
@@ -157,9 +170,9 @@ export const CodeEditorEditable = ({
           ref={codeBlockRef}
           className={`code-editor__hlcode__qxcy language-${language}`}
           placeholder={placeholder}
-        >{`${value}`}</code>
+        >{`${value.replace(/\n$/, '\n\u200b')}`}</code>
         <textarea
-          value={value}
+          value={value.replace(/\n$/, '\n\u200b')}
           spellCheck='false'
           ref={textAreaRef}
           className='hljs code-editor__textarea__qxcy'
