@@ -87,7 +87,7 @@ export const CodeEditorEditable = ({
     const myField = e.currentTarget;
     var myValue = myField.value.replace(/\u200b$/, '');
     const tab = '                                '.substring(0, tabSize);
-    if (e.key == 'Backspace' && myField.value.match(/\n\u200b$/)) {
+    if (e.key == 'Backspace' && myField.selectionEnd && myField.value.substring(myField.selectionEnd - 1).match(/^\n*\u200b/)) {
       e.preventDefault();
       setValue(myValue.replace(/\n$/, ''));
       return;
