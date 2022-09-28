@@ -85,55 +85,67 @@ export const CodeEditorEditable = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     const myField = e.currentTarget;
-    const val = myField.value.replace(/\n\u200b$/, '');
-    const myValue = '                                '.substring(0, tabSize);
+    var myValue = myField.value.replace(/\u200b$/, '');
+    const tab = '                                '.substring(0, tabSize);
     if (e.key == 'Backspace' && myField.value.match(/\n\u200b$/)) {
       e.preventDefault();
-      setValue(val.replace(/\n$/, ''))
+      setValue(myValue.replace(/\n$/, ''));
+      return;
     }
-    else if (e.key === 'Tab') {
+    if (e.key === 'Tab') {
       e.preventDefault();
       if (myField.selectionStart || myField.selectionStart === 0) {
-        const startPos = val.substring(0, myField.selectionStart).lastIndexOf('\n') + 1
-        const endPos = myField.selectionEnd -
-          (myField.selectionStart != myField.selectionEnd && val[myField.selectionEnd-1] == '\n' ? 1: 0);
-        const before = val.substring(0, startPos);
-        const selection = val.substring(startPos, endPos);
-        const after = val.substring(endPos);
-        let newValue;
-        if (endPos != startPos) {
+        var startPos = myValue.substring(0, myField.selectionStart).lastIndexOf('\n') + 1;
+        if (myField.selectionStart != myField.selectionEnd) {
+          let selection = myField.value.substr(myField.selectionStart, myField.selectionEnd);
+          const endPos = myField.selectionEnd - (selection.match(/\n$/) ? 1 : 0) - (selection.match(/\n\u200b$/) ? 2 : 0);
+          const before = myValue.substring(0, startPos);
+          const after = myValue.substring(endPos);
+          selection = myValue.substring(startPos, endPos);
           if (e.shiftKey) {
-            const r = RegExp('\n' + myValue, 'mg');
-            newValue = before +
-              selection.substring(selection.substring(0, tabSize) == myValue ? tabSize : 0).replace(r, '\n') +
-              after;
-          }
-          else {
-            newValue = before + myValue + selection.replace(/\n/mg, '\n' + myValue) + after;
-            if (selection.replace(/ +/, '').length)
+            const spaces = selection.match(/^ +/);
+            const newValue = before + selection.replace(RegExp('^' + tab, 'mg'), '') + after;
+            setCaretPos({
+              start: Math.min(myField.selectionStart, before.length + (spaces ? spaces[0].length - tabSize : 0)),
+              end: myField.selectionEnd + newValue.length - myValue.length
+            });
+            setValue(newValue);
+          } else {
+            const newValue = selection.replace(/^/mg, tab);
               setCaretPos({
                 start: startPos,
-                end: newValue.length - after.length
+                end: myField.selectionEnd + newValue.length - selection.length
               });
-            else
+            setValue(before + newValue + after);
+          }
+        } else {
+          const before = myValue.substring(0, startPos);
+          const after = myValue.substring(startPos);
+          if (e.shiftKey) {
+            if (after.match(RegExp('^' + tab))) {
+              setValue(before + after.substring(tabSize));
               setCaretPos({
-                start: endPos + tabSize,
-                end: endPos + tabSize
+                start: Math.max(startPos, myField.selectionStart - tabSize),
+                end: Math.max(startPos, myField.selectionStart - tabSize)
               });
+            } else {
+              setCaretPos({
+                start: myField.selectionStart,
+                end: myField.selectionStart
+              });
+            }
+          } else {
+            setCaretPos({
+              start: myField.selectionStart + tabSize,
+              end: myField.selectionStart + tabSize
+            });
+            if (!myValue.substring(startPos, myField.selectionStart).match(/[^ ]/)) {
+              setValue(before + tab + after);
+            } else {
+              setValue(myValue.substring(0, myField.selectionStart) + tab + myValue.substring(myField.selectionStart))
+            }
           }
         }
-        else if (e.shiftKey) {
-          newValue = val;
-          if (val.substring(endPos, endPos + tabSize) == myValue) {
-            newValue = before + after.substring(tabSize);
-            setCaretPos({start: startPos, end: startPos});
-          }
-        }
-        else {
-          setCaretPos({start: startPos + tabSize, end: startPos + tabSize});
-          newValue = before + myValue + after;
-        }
-        setValue(newValue);
       }
     }
   };
