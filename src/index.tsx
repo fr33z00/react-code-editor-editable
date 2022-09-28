@@ -123,6 +123,7 @@ export const CodeEditorEditable = ({
           }
         }
         else if (e.shiftKey) {
+          newValue = val;
           if (val.substring(endPos, endPos + tabSize) == myValue) {
             newValue = before + after.substring(tabSize);
             setCaretPos({start: startPos, end: startPos});
